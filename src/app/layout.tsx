@@ -16,7 +16,7 @@ const OG_IMAGE = "/og-image.png";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title:
-    "arche.remove – Free Background Remover | No Sign-up, No Limits, No Upload",
+    "arche.remove – Free Background Remover",
   description:
     "Remove image backgrounds instantly in your browser. 100% free, unlimited, no quality loss, and no uploads to external servers. Remove backgrounds. Keep everything else.",
   applicationName: SITE_NAME,
