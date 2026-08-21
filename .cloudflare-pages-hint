@@ -1,5 +1,0 @@
-Cloudflare Pages build settings for arche.remove:
-  Framework preset:       Next.js (Static)
-  Build command:           bun run build    (or: npm run build)
-  Build output directory:  out
-  Environment variables:   (none required)

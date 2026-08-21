@@ -1,0 +1,7 @@
+# arche.links — Cloudflare Pages SPA fallback
+# This file is automatically copied to out/ during `next build`.
+#
+# Hash URLs (/#v1.…) are client-side only, no redirect needed.
+# Unknown paths fall back to the SPA root with a 200 (so the app
+# can render its own 404 state).
+/*    /index.html   200

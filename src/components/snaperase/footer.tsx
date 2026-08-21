@@ -28,7 +28,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="font-medium text-foreground hover:text-amber-accent transition-colors underline-offset-4 hover:underline focus-amber"
         >
-          arche.
+          Arche
         </a>
       </p>
     </footer>

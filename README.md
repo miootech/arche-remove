@@ -1,21 +1,21 @@
-# arche.remove
+# arche.links
 
-> **Remove backgrounds. Keep everything else.**
+> **All your links. One page. Free forever.**
 
-A polished, production-ready, fully client-side image background remover.
-No backend, no API, no serverless functions, no image upload to external
-servers. All AI processing happens locally in the user's browser via
-`@imgly/background-removal` (onnxruntime-web).
+A polished, 100% client-side Linktree alternative with **every premium
+feature free**. No sign-up, no credits, no daily limits, no watermark.
 
-- 100% in-browser AI (WebGPU → WebGL → WASM fallback, automatic)
-- No sign-up, no credits, no daily limits, no watermark
-- Transparent PNG and WebP export at original resolution
-- Before/after comparison slider (mouse, touch, keyboard)
-- Two modes: Original Quality (isnet_fp16) and Fast (isnet_quint8)
-- Background replacement: transparent / solid color / gradient / image
-- Warm minimalist design with clean Light and Dark themes
-- Mobile-first, responsive, accessible (ARIA, keyboard, reduced-motion)
-- Static export — deploy on Cloudflare Pages, Netlify, Vercel static, GitHub Pages, etc.
+Build your link page in the editor, then either:
+
+1. **Share via URL** — the profile is encoded into the URL hash
+   (`yoursite.com/#v1.…`) and rendered live when anyone opens it. No
+   backend, no database.
+2. **Download as standalone HTML** — a tiny, self-contained file
+   (embedded CSS + JS + profile data + social SVGs). Host it anywhere or
+   open it locally. **No size limit**.
+
+Works on Cloudflare Pages, Netlify static, Vercel static, GitHub Pages —
+any static host. Zero backend required.
 
 ---
 
@@ -24,32 +24,30 @@ servers. All AI processing happens locally in the user's browser via
 1. [Quick start](#quick-start)
 2. [Build for production](#build-for-production)
 3. [Deploy on Cloudflare Pages](#deploy-on-cloudflare-pages)
-4. [Customize the favicon and logo](#customize-the-favicon-and-logo)
-5. [Customize the brand name](#customize-the-brand-name)
-6. [Customize colors and themes](#customize-colors-and-themes)
-7. [Project structure](#project-structure)
-8. [How it works (architecture)](#how-it-works-architecture)
-9. [Privacy](#privacy)
-10. [Troubleshooting](#troubleshooting)
+4. [How hosting works](#how-hosting-works)
+5. [Features (all free)](#features-all-free)
+6. [Customize the favicon and logo](#customize-the-favicon-and-logo)
+7. [Customize the brand name](#customize-the-brand-name)
+8. [Customize colors and themes](#customize-colors-and-themes)
+9. [Project structure](#project-structure)
+10. [Privacy](#privacy)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
 ## Quick start
 
-Requirements: Node.js 18+ (or Bun 1.1+), modern browser for development.
+Requirements: Node.js 18+ (or Bun 1.1+).
 
 ```bash
-# install dependencies
 bun install            # or: npm install
-
-# run dev server
 bun run dev            # or: npm run dev
 # open http://localhost:3000
 ```
 
-The first time you upload an image, the AI model (~40–80 MB) is downloaded
-once from `staticimgly.com` (the library's free CDN, AGPL-licensed) and then
-cached by the browser. Subsequent runs are much faster.
+You'll see the editor with three default links and the Warm theme.
+Click through the tabs to customize everything, then open the Export
+tab to share or download.
 
 ---
 
@@ -62,7 +60,6 @@ bun run build          # or: npm run build
 Output goes to **`out/`** — a fully static folder you can host anywhere.
 
 ```bash
-# Preview the production build locally:
 npx serve out
 ```
 
@@ -77,29 +74,71 @@ npx serve out
    - **Build command:** `bun run build` (or `npm run build`)
    - **Build output directory:** `out`
    - **Environment variables:** none required
-4. Deploy. That's it — no workers, no functions, no env secrets.
+4. Deploy.
 
-> The model assets are loaded from `staticimgly.com` at runtime — you do
-> NOT need to host them yourself. If you want to self-host them, see
-> "Customize the model asset source" below.
+That's it — no workers, no functions, no env secrets.
+
+---
+
+## How hosting works
+
+arche.links has two modes, switched automatically by the URL:
+
+| URL | What you see |
+|---|---|
+| `yoursite.com/` | **Editor** — build your profile, live preview on the right |
+| `yoursite.com/#v1.…` | **Viewer** — renders the encoded profile read-only |
+
+When you click **"Open"** in the Export tab or share the URL, the page
+auto-detects the `#v1.…` hash and switches to viewer mode. Visitors can
+copy the URL, download the HTML, or go back to the editor (which clears
+the hash).
+
+The hash is the encoded profile:
+```
+JSON.stringify(profile)  →  encodeURIComponent  →  btoa  →  "v1." + base64
+```
+
+The hash has a soft warning at 4500 chars and a hard limit at 7000
+chars (browsers cap URLs at ~8 KB). If you exceed the limit, the editor
+will tell you and recommend downloading the HTML instead — which has
+**no size limit**.
+
+---
+
+## Features (all free)
+
+Linktree would charge for these. arche.links ships them all free:
+
+- ✅ Unlimited links (Linktree free = 5 links; Pro = unlimited)
+- ✅ All themes & custom colors (Linktree Pro)
+- ✅ All layout styles (Linktree Pro)
+- ✅ Social icons row (Linktree Pro)
+- ✅ Avatar upload
+- ✅ Verified badge
+- ✅ Featured / highlighted links
+- ✅ Custom fonts via system stack
+- ✅ Dark + light mode auto-switching in the export
+- ✅ Background patterns / gradients via custom hex
+- ✅ HTML export (no Linktree equivalent — you can't export there at all)
+- ✅ URL-hash hosting (no Linktree equivalent — they need their servers)
+- ✅ No account, no sign-up, no watermark
 
 ---
 
 ## Customize the favicon and logo
 
-This is the part most people ask about, so it gets its own section.
-
 ### 1. Browser tab favicon
 
 **File:** `public/favicon.svg`
 
-This single SVG file is the browser tab icon. Replace it with your own SVG
-(32×32 viewBox recommended). The current one is a dark rounded square with
-an amber dot, a white ring, and a diagonal line — read it as "solid subject,
-hollow background, the cut between them".
+Replace this SVG with your own (32×32 viewBox recommended). The current
+one shows three link "nodes" (a solid amber center plus two outlined
+satellites) connected by lines — read it as "you + the links orbiting
+you".
 
-If you prefer a PNG favicon, drop a `favicon.png` (32×32 or larger) into
-`public/` and update the `icons` entry in `src/app/layout.tsx`:
+For a PNG favicon, drop `favicon.png` (32×32 or larger) into `public/`
+and update the `icons` entry in `src/app/layout.tsx`:
 
 ```ts
 icons: {
@@ -110,52 +149,40 @@ icons: {
 
 ### 2. The in-app logo / brand mark
 
-**File:** `src/app/page.tsx` — search for the function `BrandMark()`.
+**File:** `src/components/linktree/profile-editor.tsx` — search for the
+function `BrandMark()`.
 
-The brand mark shown next to "arche.remove" in the page header is an inline
-SVG inside that function. Edit the SVG markup there to change the visual
-identity. No asset file needed — it's pure SVG.
-
-Example minimal swap:
-
-```tsx
-function BrandMark() {
-  return (
-    <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-surface-elevated ring-1 ring-inset ring-border">
-      {/* your SVG or <img> here */}
-      <img src="/logo.svg" alt="" className="h-5 w-5" />
-    </div>
-  );
-}
-```
+The mark shown next to "arche.links" in the editor header is an inline
+SVG inside that function. Edit the SVG markup to change the visual
+identity. No asset file needed.
 
 ### 3. Social preview image (Open Graph / Twitter card)
 
 **File:** `public/og-image.png` (1200×630 PNG)
 
 This is the image that shows when someone shares your URL on Twitter,
-Facebook, Slack, iMessage, etc. Replace this file with your own 1200×630
-PNG. The reference Python script to regenerate the current design lives at
-**`scripts/make-og-image.py`** — edit the strings and colors in that file,
-then run:
+Facebook, Slack, iMessage, etc. Replace this file with your own
+1200×630 PNG. The reference Python script to regenerate the current
+design lives at **`scripts/make-og-image.py`** — edit the strings and
+colors in that file, then run:
 
 ```bash
 python scripts/make-og-image.py
 ```
 
-### 4. The wordmark / word logo
+### 4. The wordmark
 
-If you want a custom wordmark image instead of the text "arche.remove" next
-to the brand mark, edit `src/app/page.tsx` — find the `<div
-className="flex flex-col leading-tight">` block in the header and replace
-the `<span>` text with your `<img src="/your-wordmark.svg" alt="arche.remove"
-className="h-4" />`.
+If you want a custom wordmark image instead of the text "arche.links"
+next to the brand mark, edit
+`src/components/linktree/profile-editor.tsx` — find the
+`<span>arche.links</span>` in the header and replace with your own
+`<img src="/your-wordmark.svg" alt="arche.links" className="h-4" />`.
 
 ---
 
 ## Customize the brand name
 
-The brand name "arche.remove" is referenced in these places:
+The brand name "arche.links" is referenced in these places:
 
 | Where | File | What to change |
 |---|---|---|
@@ -164,82 +191,39 @@ The brand name "arche.remove" is referenced in these places:
 | Open Graph / Twitter | `src/app/layout.tsx` | `metadata.openGraph.*` and `metadata.twitter.*` |
 | JSON-LD structured data | `src/app/layout.tsx` | the `jsonLd` constant |
 | Keywords | `src/app/layout.tsx` | `metadata.keywords` |
-| Header text | `src/app/page.tsx` | `<span>arche.remove</span>` in the header |
+| Header text | `src/components/linktree/profile-editor.tsx` | `<span>arche.links</span>` |
 | Footer (currently "Arche") | `src/components/snaperase/footer.tsx` | the `<a>` text |
-| Downloaded filename suffix | `src/lib/image-utils.ts` | `brandFilename()` — currently `-made-with-arche-remove` |
+| Exported HTML footer brand | `src/lib/export-html.ts` | the `made with arche.links` string |
+| Exported HTML title suffix | `src/lib/export-html.ts` | `— arche.links` in the `<title>` |
+| Downloaded filename suffix | `src/lib/export-html.ts` | `-arche-links.html` |
 | OG image | `scripts/make-og-image.py` | the strings, then re-run the script |
 
-The canonical site URL is set in `src/app/layout.tsx` as `SITE_URL`. Update
-it to your real deployment URL.
+The canonical site URL is set in `src/app/layout.tsx` as `SITE_URL`.
+Update it to your real deployment URL.
 
 ---
 
 ## Customize colors and themes
 
-All design tokens live in **`src/app/globals.css`** under `:root` (light
-theme) and `.dark` (dark theme). Edit the hex values there — both themes use
-the same variable names so every component updates automatically.
+All design tokens live in **`src/app/globals.css`** under `:root`
+(light theme) and `.dark` (dark theme). Edit the hex values there —
+both themes use the same variable names so every component updates
+automatically.
 
-```css
-:root {
-  --background: #fafaf7;       /* light page background */
-  --foreground: #1a1a1f;       /* light mode text */
-  --amber-accent: #b8754a;     /* light mode accent */
-  /* ... etc */
-}
+For profile-specific themes (what users see in their exported
+profile), edit **`src/lib/themes.ts`** — each preset has a `light`
+and `dark` variant. Add new presets or modify existing ones.
 
-.dark {
-  --background: #111113;       /* dark page background */
-  --foreground: #f5f5f7;       /* dark mode text */
-  --amber-accent: #e6b87a;     /* dark mode accent */
-  /* ... etc */
-}
-```
-
-The default theme is **light**. To flip the default to dark, edit
-`src/app/layout.tsx`:
-
-```tsx
-<ThemeProvider
-  attribute="class"
-  defaultTheme="dark"     // ← change here
-  enableSystem={false}
-  disableTransitionOnChange
->
-```
-
-To follow the user's OS preference instead, set `enableSystem={true}` and
-`defaultTheme="system"`.
-
----
-
-## Customize the model asset source
-
-By default the AI model is fetched from `https://staticimgly.com/...` (the
-library's free CDN). If you want to self-host the model assets (e.g. for
-air-gapped or fully-brand-controlled deployments):
-
-1. Download the asset bundle matching your installed version from
-   `https://staticimgly.com/@imgly/background-removal-data/<VERSION>/package.tgz`
-   (replace `<VERSION>` with the version in `package.json`, e.g. `1.7.0`).
-2. Extract it and move the contents of `dist/` into your `public/ai-assets/`
-   folder so they're served at `/ai-assets/`.
-3. In `src/lib/ai/background-removal.ts`, inside `buildConfig()`, add:
-
-```ts
-return {
-  publicPath: "/ai-assets/",
-  device: "gpu",
-  // ...rest stays the same
-};
-```
+For ColorHunt-style palette presets (4-color sets that apply to all
+slots at once), edit **`src/lib/palettes.ts`** — add new palettes or
+reorder existing ones.
 
 ---
 
 ## Project structure
 
 ```
-arche.remove/
+arche.links/
 ├── public/
 │   ├── favicon.svg              ← browser tab icon (replaceable)
 │   ├── og-image.png             ← social share preview (1200×630)
@@ -249,26 +233,33 @@ arche.remove/
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx           ← SEO metadata, JSON-LD, ThemeProvider
-│   │   ├── page.tsx             ← main page + BrandMark()
+│   │   ├── page.tsx             ← hash-routing entry (editor ↔ viewer)
 │   │   └── globals.css          ← light + dark theme tokens
 │   ├── components/
 │   │   ├── theme-provider.tsx
-│   │   └── snaperase/
-│   │       ├── upload-zone.tsx
-│   │       ├── processing-overlay.tsx
-│   │       ├── before-after-slider.tsx
-│   │       ├── export-controls.tsx
-│   │       ├── background-replacement.tsx
-│   │       ├── mode-selector.tsx
-│   │       ├── theme-toggle.tsx
-│   │       └── footer.tsx
+│   │   ├── snaperase/
+│   │   │   ├── theme-toggle.tsx ← Sun/Moon toggle (reused from arche.remove)
+│   │   │   └── footer.tsx       ← "Made with ♥ by Arche"
+│   │   └── linktree/
+│   │       ├── profile-editor.tsx   ← main editor (4 tabs)
+│   │       ├── profile-viewer.tsx   ← read-only view from hash
+│   │       ├── profile-preview.tsx ← live iframe preview
+│   │       └── tabs/
+│   │           ├── content-tab.tsx    ← name, bio, avatar, links, socials
+│   │           ├── design-tab.tsx     ← theme presets + ColorHunt + custom hex
+│   │           ├── layout-tab.tsx     ← layout presets + spacing sliders
+│   │           └── export-tab.tsx     ← share URL + download HTML
 │   ├── hooks/
-│   │   └── use-background-removal.ts
+│   │   └── use-profile.ts       ← state management + hash sync
 │   └── lib/
-│       ├── ai/
-│       │   └── background-removal.ts
-│       ├── browser-capabilities.ts
-│       └── image-utils.ts
+│       ├── profile.ts           ← Profile type + defaults
+│       ├── profile-codec.ts    ← encode/decode profile ↔ URL hash
+│       ├── themes.ts            ← 8 theme presets (light + dark paired)
+│       ├── layouts.ts           ← 5 layout presets
+│       ├── palettes.ts          ← 16 ColorHunt-style 4-color sets
+│       ├── export-html.ts       ← standalone HTML generator
+│       ├── image-utils.ts       ← canvas, ImageBitmap, validation, download
+│       └── utils.ts              ← cn() Tailwind helper
 ├── next.config.ts
 ├── package.json
 ├── tsconfig.json
@@ -281,78 +272,40 @@ arche.remove/
 
 ---
 
-## How it works (architecture)
-
-```
-User Image (Blob)
-      │
-      ▼
-Browser (no network upload of image pixels)
-      │
-      ▼
-@imgly/background-removal  ── loads AI model from staticimgly.com CDN (cached)
-      │                       (one-time download, browser-cached afterwards)
-      ▼
-onnxruntime-web  ── picks WebGPU → WebGL → WASM → CPU automatically
-      │
-      ▼
-Segmentation mask (ISNet neural network)
-      │
-      ▼
-Transparent PNG Blob
-      │
-      ▼
-User Download (PNG or WebP at original resolution)
-```
-
-The image's pixels are never sent to any server. The only network request
-is the model asset download from `staticimgly.com` (the AGPL-licensed free
-CDN that the `@imgly/background-removal` library uses by default).
-
----
-
 ## Privacy
 
-- The user's image is processed entirely in the browser.
-- No image upload endpoint exists.
-- No API key is exposed.
-- No image data is sent to analytics (no analytics is wired up at all).
-- No server processing is required at runtime.
+- The user's profile data lives either in:
+  - The URL hash fragment (shared via your Cloudflare Pages URL)
+  - A downloaded standalone HTML file (self-contained, no dependencies)
+  - The browser's localStorage (auto-saved during editing)
+- No backend, no databases, no API keys.
+- No analytics. No tracking pixels. No third-party requests.
+- The exported HTML is fully self-contained — opening it locally
+  doesn't make any network requests.
 
 ---
 
 ## Troubleshooting
 
-**First run takes a while.** The model (~40–80 MB) downloads once and is
-then cached by the browser. Subsequent runs skip the download.
+**Theme toggle doesn't work in `bun run dev`.** If you access the dev
+server from a LAN IP (e.g. `192.168.2.121:3000` for mobile testing),
+Next.js 16 returns `403 Forbidden` on JS chunks. Fix is already in
+`next.config.ts` → `allowedDevOrigins`. Add your LAN IP there, or just
+use `bun run build && npx serve out` (static export has no origin
+check).
 
-**Theme toggle or other buttons don't respond in `bun run dev`.** If you
-access the dev server from anything other than `localhost:3000` (e.g. a
-LAN IP like `192.168.2.121:3000` for testing on mobile), Next.js 16
-returns `403 Forbidden` on JS chunks and HMR websockets — the browser
-loads the static HTML but never hydrates React, so the theme toggle
-appears dead.
+**Hash URL doesn't switch to viewer mode.** Make sure the hash starts
+with `v1.` — older versions used a different prefix. Clear
+localStorage and try again.
 
-Fix (already in `next.config.ts` → `allowedDevOrigins`): add your LAN IP
-to that list, or just run `bun run build && npx serve out` to use the
-production static export instead (no origin check on a static server).
+**Exported HTML file is huge.** Avatars are resized to 256×256 JPEG
+(quality 0.85) before being embedded — that keeps them under ~10 KB
+each. The HTML itself with 10 links + 5 socials + avatar is typically
+under 15 KB total.
 
-**"WebAssembly multi-threading is not supported"** in the console — this
-is a benign warning from onnxruntime-web. It just means the inference
-falls back to single-threaded WASM, which still works fine. To enable
-multi-threading you'd need to set COOP/COEP headers on your host
-(`Cross-Origin-Opener-Policy: same-origin` +
-`Cross-Origin-Embedder-Policy: require-corp`). Not required for the app
-to function.
-
-**Very large images may fail on weak devices.** The app warns before
-processing and recommends Fast mode. If processing still fails, the error
-is shown in a friendly message and the user can retry or pick a smaller
-image.
-
-**Build error mentioning `/api` route.** You probably re-introduced an API
-route. With `output: "export"`, no API routes are allowed — that's the
-whole point (no backend). Remove the offending route.
+**Want a fixed theme (not auto-switch).** In the Export tab, pick
+"Light" or "Dark" instead of "Auto (visitor)" before clicking
+"Download HTML". The exported file will use that theme only.
 
 ---
 

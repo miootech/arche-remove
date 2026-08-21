@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3000",
     "build": "next build",
-    "start": "echo 'arche.remove is a static export — serve the out/ folder with: npx serve out' && exit 0",
+    "start": "echo 'arche.remove is a static export — run: npx serve out' && exit 0",
     "lint": "eslint ."
   },
   "dependencies": {

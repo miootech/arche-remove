@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from "react";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface BeforeAfterSliderProps {
@@ -181,6 +180,8 @@ export function BeforeAfterSlider({
         alt={afterAlt}
         className="absolute inset-0 w-full h-full object-contain pointer-events-none"
         draggable={false}
+        // The after layer is unclipped — the before layer paints on top of
+        // the left portion only.
       />
 
       {/* BEFORE layer — clipped to the LEFT of the handle */}
@@ -189,6 +190,7 @@ export function BeforeAfterSlider({
         className="absolute inset-0 pointer-events-none"
         style={{
           clipPath: `inset(0 ${(100 - position * 100).toFixed(2)}% 0 0)`,
+          // Safari fallback — older builds used `-webkit-clip-path`.
           WebkitClipPath: `inset(0 ${(100 - position * 100).toFixed(2)}% 0 0)`,
         }}
       >
@@ -238,13 +240,22 @@ export function BeforeAfterSlider({
               dragging ? "scale-110" : "scale-100 hover:scale-105",
             )}
           >
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={20}
-              height={20}
-              className="w-5 h-5 object-contain"
-            />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M5 4L2 8L5 12"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M11 4L14 8L11 12"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
       </div>

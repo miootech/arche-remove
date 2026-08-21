@@ -1,17 +1,12 @@
 arche.remove — application source code
 Copyright (c) Arche
 
-This application's source code is provided as-is for your use.
+MIT License — use, modify, distribute freely (including commercially)
+with attribution.
 
-The bundled AI library `@imgly/background-removal` is licensed under AGPL
-(see node_modules/@imgly/background-removal/LICENSE.md after install).
-The AI model assets are fetched at runtime from staticimgly.com and are
-also AGPL-licensed.
+The application is 100% client-side. Profile data lives either in:
+  - The URL hash fragment (shared via your Cloudflare Pages URL)
+  - A downloaded standalone HTML file (self-contained, no dependencies)
+  - The browser's localStorage (auto-saved during editing)
 
-This means:
-  - You can deploy and use arche.remove freely.
-  - If you modify and republish the app (or the library), AGPL terms apply
-    to those modifications.
-
-For commercial licensing of the underlying AI library, contact
-support@img.ly.
+No backend, no databases, no API keys required.
