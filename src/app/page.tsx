@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { UploadZone } from "@/components/snaperase/upload-zone";
 import { BeforeAfterSlider } from "@/components/snaperase/before-after-slider";
 import { ProcessingOverlay } from "@/components/snaperase/processing-overlay";
@@ -405,40 +406,13 @@ function BrandMark() {
       className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-surface-elevated to-surface ring-1 ring-inset ring-border"
       aria-hidden="true"
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect
-          x="2"
-          y="2"
-          width="16"
-          height="16"
-          rx="4"
-          className="fill-amber-accent"
-          opacity="0.18"
-        />
-        <path
-          d="M5 14L14 5"
-          stroke="currentColor"
-          className="text-amber-accent"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-        <circle cx="6.5" cy="13.5" r="2.2" className="fill-amber-accent" />
-        <circle
-          cx="13.5"
-          cy="6.5"
-          r="2.2"
-          fill="none"
-          stroke="currentColor"
-          className="text-foreground"
-          strokeWidth="1.8"
-        />
-      </svg>
+      <Image
+        src="/logo.png"
+        alt="Logo"
+        width={20}
+        height={20}
+        className="h-5 w-5 object-contain"
+      />
     </div>
   );
 }

@@ -23,7 +23,7 @@ export function Footer() {
         </span>
         <span>by</span>
         <a
-          href="https://arche-projects.pages.dev"
+          href="https://arche-website.pages.dev/"
           target="_blank"
           rel="noopener noreferrer"
           className="font-medium text-foreground hover:text-amber-accent transition-colors underline-offset-4 hover:underline focus-amber"

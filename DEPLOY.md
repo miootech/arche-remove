@@ -123,4 +123,4 @@ a visitor-side ad/tracker blocker, not a Cloudflare config issue.
 
 ---
 
-Made with ♥ by [Arche](https://arche-projects.pages.dev).
+Made with ♥ by [Arche](https://arche-website.pages.dev/).

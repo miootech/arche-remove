@@ -166,4 +166,4 @@ will too (with the same Node version + npm version).
 
 ---
 
-Made with ♥ by [Arche](https://arche-projects.pages.dev)
+Made with ♥ by [Arche](https://arche-website.pages.dev/)

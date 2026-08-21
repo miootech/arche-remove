@@ -12,5 +12,5 @@
 # OG image and favicon — short cache.
 /og-image.png
   Cache-Control: public, max-age=86400
-/favicon.svg
+/favicon.png
   Cache-Control: public, max-age=86400

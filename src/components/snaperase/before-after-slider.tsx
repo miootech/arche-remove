@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface BeforeAfterSliderProps {
@@ -240,22 +241,13 @@ export function BeforeAfterSlider({
               dragging ? "scale-110" : "scale-100 hover:scale-105",
             )}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M5 4L2 8L5 12"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M11 4L14 8L11 12"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={16}
+              height={16}
+              className="h-4 w-4 object-contain"
+            />
           </div>
         </div>
       </div>

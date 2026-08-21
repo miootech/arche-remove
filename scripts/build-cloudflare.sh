@@ -43,7 +43,7 @@ sleep 1
 echo "→ Installing variant files (page.tsx, layout.tsx, favicon, og-image)"
 cp "$VARIANT_DIR/page.tsx"     "$SRC/src/app/page.tsx"
 cp "$VARIANT_DIR/layout.tsx"   "$SRC/src/app/layout.tsx"
-cp "$VARIANT_DIR/favicon.svg"  "$SRC/public/favicon.svg"
+cp "$VARIANT_DIR/favicon.png"  "$SRC/public/favicon.png"
 cp "$VARIANT_DIR/og-image.png" "$SRC/public/og-image.png"
 
 # Clean any previous build output.
@@ -88,7 +88,7 @@ cat > "$SRC/out/_headers" <<'HEADERS'
 # OG image and favicon — short cache.
 /og-image.png
   Cache-Control: public, max-age=86400
-/favicon.svg
+/favicon.png
   Cache-Control: public, max-age=86400
 HEADERS
 

@@ -130,7 +130,7 @@ Linktree would charge for these. arche.links ships them all free:
 
 ### 1. Browser tab favicon
 
-**File:** `public/favicon.svg`
+**File:** `public/favicon.png`
 
 Replace this SVG with your own (32×32 viewBox recommended). The current
 one shows three link "nodes" (a solid amber center plus two outlined
@@ -225,7 +225,7 @@ reorder existing ones.
 ```
 arche.links/
 ├── public/
-│   ├── favicon.svg              ← browser tab icon (replaceable)
+│   ├── favicon.png              ← browser tab icon (replaceable)
 │   ├── og-image.png             ← social share preview (1200×630)
 │   └── robots.txt
 ├── scripts/
@@ -309,4 +309,4 @@ under 15 KB total.
 
 ---
 
-Made with ♥ by [Arche](https://arche-projects.pages.dev).
+Made with ♥ by [Arche](https://arche-website.pages.dev/).
