@@ -15,22 +15,16 @@ import {
 type BgType = "transparent" | "color" | "gradient" | "image";
 
 interface BackgroundReplacementProps {
-  /** The transparent foreground result (after bg removal). */
   foregroundBlob: Blob;
-  /** Original dimensions. */
   width: number;
   height: number;
-  /** Original file stem for naming. */
   originalStem: string;
-  /** Disabled while processing. */
   disabled?: boolean;
 }
 
 interface GradientPreset {
   name: string;
-  /** CSS for the swatch button. */
   css: string;
-  /** Canvas-drawable hex pair (matches the CSS). */
   from: string;
   to: string;
 }
@@ -65,12 +59,13 @@ export function BackgroundReplacement({
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Preview canvas — shows the composed result with the chosen background.
   const previewRef = useRef<HTMLCanvasElement>(null);
-  const fgBitmapRef = useRef<ImageBitmap | null>(null);
-  const [, setRenderTick] = useState(0); // force preview redraw trigger
+  // IMPORTANT: store the foreground bitmap in STATE, not a ref. The draw
+  // effect below depends on it — if we used a ref + a separate `renderTick`
+  // state, the draw effect wouldn't re-run when the bitmap loads (refs don't
+  // trigger re-renders, and the deps wouldn't change).
+  const [fgBitmap, setFgBitmap] = useState<ImageBitmap | null>(null);
 
-  // Load foreground once into a bitmap. On cleanup, close it.
   useEffect(() => {
     let cancelled = false;
     let bitmap: ImageBitmap | null = null;
@@ -80,17 +75,18 @@ export function BackgroundReplacement({
         return;
       }
       bitmap = b;
-      fgBitmapRef.current = b;
-      setRenderTick((n) => n + 1);
+      setFgBitmap(b);
     });
     return () => {
       cancelled = true;
       bitmap?.close?.();
-      fgBitmapRef.current = null;
+      setFgBitmap((prev) => {
+        prev?.close?.();
+        return null;
+      });
     };
   }, [foregroundBlob]);
 
-  // Background image upload.
   const onBgImage = useCallback(async (file: File) => {
     try {
       const bitmap = await createImageBitmap(file);
@@ -103,18 +99,16 @@ export function BackgroundReplacement({
     }
   }, []);
 
-  // Cleanup bg image on unmount.
   useEffect(() => {
     return () => {
       bgImageBitmap?.close?.();
     };
   }, []);
 
-  // Draw preview whenever any input changes.
+  // Draw preview whenever any input changes (incl. foreground bitmap load).
   useEffect(() => {
     const canvas = previewRef.current;
-    const fg = fgBitmapRef.current;
-    if (!canvas || !fg) return;
+    if (!canvas || !fgBitmap) return;
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
@@ -134,7 +128,6 @@ export function BackgroundReplacement({
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
     } else if (type === "image" && bgImageBitmap) {
-      // Cover-fit draw.
       const sw = bgImageBitmap.width;
       const sh = bgImageBitmap.height;
       const scale = Math.max(width / sw, height / sh);
@@ -144,11 +137,9 @@ export function BackgroundReplacement({
       const y = (height - h) / 2;
       ctx.drawImage(bgImageBitmap, x, y, w, h);
     }
-    // Draw foreground on top.
-    ctx.drawImage(fg, 0, 0, width, height);
-  }, [type, solidColor, gradientIdx, bgImageBitmap, width, height]);
+    ctx.drawImage(fgBitmap, 0, 0, width, height);
+  }, [type, solidColor, gradientIdx, bgImageBitmap, fgBitmap, width, height]);
 
-  // Export composed result as PNG.
   const handleDownload = useCallback(async () => {
     setExporting(true);
     setError(null);
@@ -181,7 +172,6 @@ export function BackgroundReplacement({
         </h3>
       </div>
 
-      {/* Type selector */}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <TypePill
           active={type === "transparent"}
@@ -209,7 +199,6 @@ export function BackgroundReplacement({
         />
       </div>
 
-      {/* Controls per type */}
       {type === "color" && (
         <div className="mt-4 space-y-3">
           <div className="flex flex-wrap gap-2">
@@ -229,7 +218,6 @@ export function BackgroundReplacement({
                 style={{ backgroundColor: p.value }}
               />
             ))}
-            {/* Custom color picker */}
             <label
               className={cn(
                 "relative h-8 w-8 rounded-full ring-2 ring-offset-2 ring-offset-surface cursor-pointer overflow-hidden",
@@ -310,7 +298,6 @@ export function BackgroundReplacement({
         </div>
       )}
 
-      {/* Live preview */}
       <div className="mt-5">
         <div className="text-[11px] text-muted-foreground/70 mb-2">Preview</div>
         <div
@@ -331,7 +318,6 @@ export function BackgroundReplacement({
         </div>
       </div>
 
-      {/* Download */}
       <button
         type="button"
         onClick={handleDownload}
