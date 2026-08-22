@@ -14,3 +14,11 @@
   Cache-Control: public, max-age=86400
 /favicon.png
   Cache-Control: public, max-age=86400
+
+# Sitemap and robots — short cache so Googlebot always sees fresh URLs.
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+/robots.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8

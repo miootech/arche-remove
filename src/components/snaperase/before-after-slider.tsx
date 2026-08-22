@@ -17,12 +17,6 @@ interface BeforeAfterSliderProps {
   /** Alt text for accessibility. */
   beforeAlt: string;
   afterAlt: string;
-  /** Image aspect ratio as a CSS string like "640 / 480" — used to size the
-   *  container so it doesn't collapse to 0 height when children are
-   *  absolutely positioned. Falls back to 1 / 1. */
-  aspectRatio?: string;
-  /** Max height for the slider (e.g. "70vh"). Default: 70vh. */
-  maxHeight?: string;
   /** Initial slider position in [0,1]. Default 0.5. */
   initialPosition?: number;
   /** Optional aria-label. */
@@ -38,18 +32,12 @@ interface BeforeAfterSliderProps {
  * - Smooth, no jitter — pointer events throttled with requestAnimationFrame.
  * - Checkerboard background makes transparency in the "after" layer visible.
  * - Respects prefers-reduced-motion (no transition on the handle).
- *
- * IMPORTANT: the container uses `aspect-ratio` to get a real height.
- * Without it, the absolute-positioned images inside collapse to 0×0
- * and the slider is invisible.
  */
 export function BeforeAfterSlider({
   beforeSrc,
   afterSrc,
   beforeAlt,
   afterAlt,
-  aspectRatio = "1 / 1",
-  maxHeight = "70vh",
   initialPosition = 0.5,
   label = "Before / After comparison",
 }: BeforeAfterSliderProps) {
@@ -67,10 +55,12 @@ export function BeforeAfterSlider({
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    // The "before" layer is clipped to the left of the slider position.
     const before = el.querySelector<HTMLElement>('[data-layer="before"]');
     if (before) {
       before.style.clipPath = `inset(0 ${(100 - position * 100).toFixed(2)}% 0 0)`;
     }
+    // Move the handle.
     el.style.setProperty("--snaperase-pos", pct);
   }, [position, pct]);
 
@@ -92,13 +82,14 @@ export function BeforeAfterSlider({
     }
   }, []);
 
+  // Pointer handlers (mouse, pen, touch — unified via PointerEvents).
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.button !== 0 && e.pointerType === "mouse") return;
       try {
         (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
       } catch {
-        /* no-op */
+        /* no-op: some browsers throw on invalid pointer id */
       }
       setDragging(true);
       updatePosition(e.clientX);
@@ -126,6 +117,7 @@ export function BeforeAfterSlider({
     [],
   );
 
+  // Keyboard — arrows move 2%, Home/End jump to edges.
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       let delta = 0;
@@ -153,6 +145,7 @@ export function BeforeAfterSlider({
     [],
   );
 
+  // Cleanup pending rAF.
   useEffect(() => {
     return () => {
       if (rafRef.current != null) {
@@ -161,6 +154,7 @@ export function BeforeAfterSlider({
     };
   }, []);
 
+  // Reset to middle when source changes.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPosition(Math.max(0, Math.min(1, initialPosition)));
@@ -176,25 +170,27 @@ export function BeforeAfterSlider({
       )}
       style={
         {
-          aspectRatio,
-          maxHeight,
-          margin: "0 auto",
           ["--snaperase-pos" as string]: pct,
         } as React.CSSProperties
       }
     >
+      {/* AFTER layer (full-bleed, drawn FIRST = bottom-most) */}
       <img
         src={afterSrc}
         alt={afterAlt}
         className="absolute inset-0 w-full h-full object-contain pointer-events-none"
         draggable={false}
+        // The after layer is unclipped — the before layer paints on top of
+        // the left portion only.
       />
 
+      {/* BEFORE layer — clipped to the LEFT of the handle */}
       <div
         data-layer="before"
         className="absolute inset-0 pointer-events-none"
         style={{
           clipPath: `inset(0 ${(100 - position * 100).toFixed(2)}% 0 0)`,
+          // Safari fallback — older builds used `-webkit-clip-path`.
           WebkitClipPath: `inset(0 ${(100 - position * 100).toFixed(2)}% 0 0)`,
         }}
       >
@@ -206,6 +202,7 @@ export function BeforeAfterSlider({
         />
       </div>
 
+      {/* Interactive surface */}
       <div
         role="slider"
         tabIndex={0}
@@ -224,6 +221,7 @@ export function BeforeAfterSlider({
         onPointerCancel={endDrag}
         onKeyDown={onKeyDown}
       >
+        {/* Vertical divider + grip knob */}
         <div
           aria-hidden="true"
           className="absolute top-0 bottom-0 pointer-events-none"
@@ -262,6 +260,7 @@ export function BeforeAfterSlider({
         </div>
       </div>
 
+      {/* Labels */}
       <div className="pointer-events-none absolute top-3 left-3 rounded-md bg-background/70 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground ring-1 ring-inset ring-border">
         Original
       </div>

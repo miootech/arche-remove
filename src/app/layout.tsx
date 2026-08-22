@@ -49,9 +49,9 @@ export const metadata: Metadata = {
   },
   category: "technology",
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/favicon.svg" }],
-    shortcut: [{ url: "/favicon.svg" }],
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/favicon.png" }],
+    shortcut: [{ url: "/favicon.png" }],
   },
   openGraph: {
     type: "website",

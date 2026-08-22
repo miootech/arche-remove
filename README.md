@@ -309,4 +309,4 @@ under 15 KB total.
 
 ---
 
-Made with ♥ by [Arche](https://arche-website.pages.dev/).
+Made with ♥ by [Arche](https://arche-projects.pages.dev).

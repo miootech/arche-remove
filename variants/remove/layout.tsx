@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description:
     "Remove image backgrounds instantly in your browser. 100% free, unlimited, no quality loss, and no uploads to external servers. Remove backgrounds. Keep everything else.",
   applicationName: SITE_NAME,
-  authors: [{ name: "Arche", url: "https://arche-website.pages.dev/" }],
+  authors: [{ name: "Arche", url: "https://arche-projects.pages.dev" }],
   creator: "Arche",
   publisher: "Arche",
   keywords: [
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   category: "technology",
   icons: {
-    icon: [{ url: "/favicon.png", type: "image/svg+xml" }],
+    icon: [{ url: "/favicon.png", type: "image/png" }],
     apple: [{ url: "/favicon.png" }],
     shortcut: [{ url: "/favicon.png" }],
   },
@@ -134,12 +134,12 @@ const jsonLd = {
       author: {
         "@type": "Organization",
         name: "Arche",
-        url: "https://arche-website.pages.dev/",
+        url: "https://arche-projects.pages.dev",
       },
       publisher: {
         "@type": "Organization",
         name: "Arche",
-        url: "https://arche-website.pages.dev/",
+        url: "https://arche-projects.pages.dev",
       },
     },
     {
@@ -157,14 +157,14 @@ const jsonLd = {
       author: {
         "@type": "Organization",
         name: "Arche",
-        url: "https://arche-website.pages.dev/",
+        url: "https://arche-projects.pages.dev",
       },
     },
     {
       "@type": "Organization",
-      "@id": "https://arche-website.pages.dev//#org",
+      "@id": "https://arche-projects.pages.dev/#org",
       name: "Arche",
-      url: "https://arche-website.pages.dev/",
+      url: "https://arche-projects.pages.dev",
     },
   ],
 };
