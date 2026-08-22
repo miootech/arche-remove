@@ -1,24 +1,8 @@
-# arche.links — Cloudflare Pages cache headers
-# This file is automatically copied to out/ during `next build`.
-
-# Cache static assets aggressively (immutable content-hashed filenames).
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# HTML files should always be re-validated (so deploys go live instantly).
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
-
-# OG image and favicon — short cache.
 /og-image.png
   Cache-Control: public, max-age=86400
+
 /favicon.png
   Cache-Control: public, max-age=86400
-
-# Sitemap and robots — short cache so Googlebot always sees fresh URLs.
-/sitemap.xml
-  Cache-Control: public, max-age=3600
-  Content-Type: application/xml; charset=utf-8
-/robots.txt
-  Cache-Control: public, max-age=3600
-  Content-Type: text/plain; charset=utf-8
