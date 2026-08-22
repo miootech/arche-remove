@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arche-remove.pages.dev/sitemap.xml
